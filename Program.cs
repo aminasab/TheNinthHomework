@@ -4,6 +4,8 @@
     {
         static void Main(string[] args)
         {
+            CancellationTokenSource source = new();
+            CancellationToken token = source.Token;
             static void c_ImageStarted(object sender, EventArgs e) => Console.WriteLine("Скачивание файла началось");
 
             static void c_ImageCompleted(object sender, EventArgs e) => Console.WriteLine("Скачивание файла закончилось");
@@ -23,13 +25,14 @@
             ImageDownloaderAsync asyncImageDowloader = new(listOfUrl);
             asyncImageDowloader.ImageStarted += c_ImageStarted;
             asyncImageDowloader.ImageCompleted += c_ImageCompleted;
-            asyncImageDowloader.DownloaderAsync();
+            asyncImageDowloader.DownloaderAsync(token);
             Console.WriteLine("Нажмите клавишу A для выхода или любую другую клавишу для проверки статуса скачивания");
-            ConsoleKeyInfo cki = Console.ReadKey();
-            if (cki.Key == ConsoleKey.A) asyncImageDowloader.Cancel();
+            if (Console.ReadKey().Key == ConsoleKey.A)
+                source.Cancel();
             else
             {
                 Console.WriteLine(asyncImageDowloader.IsCompleted ? "\n Загружено" : "\n Не загружено");
+                Console.ReadKey();
             }
         }
     }

@@ -12,7 +12,6 @@ namespace TheNinthProgram
         int i = 1;
         List<string> _listOfUriOfImages;
         public bool IsCompleted { get; private set; }
-        CancellationTokenSource? _cancellTokenSource;
 
         public ImageDownloaderAsync(List<string> listOfUriOfImages)
         {
@@ -20,12 +19,11 @@ namespace TheNinthProgram
         }
 
         /// <summary>
-        /// Метод, который скачивает изображение.
+        /// Метод, который скачивает изображения.
         /// </summary>
-        public async Task DownloaderAsync()
+        public async Task DownloaderAsync(CancellationToken cancellationToken)
         {
             var tasks = new List<Task>();
-            _cancellTokenSource = new CancellationTokenSource();
             foreach (var url in _listOfUriOfImages)
             {
                 _fileName = $"image{i}.jpg";
@@ -39,7 +37,7 @@ namespace TheNinthProgram
                             ImageStarted?.Invoke(this, EventArgs.Empty);
                             await myWebClient.DownloadFileTaskAsync(url, _fileName);
                         }
-                    }, _cancellTokenSource.Token));
+                    }, cancellationToken));
                 }
                 catch (Exception ex)
                 {
@@ -57,11 +55,6 @@ namespace TheNinthProgram
                 Console.WriteLine("Ошибка скачивания");
                 Console.WriteLine(ex.Message);
             }
-        }
-
-        public void Cancel()
-        {
-            _cancellTokenSource?.Cancel();
         }
     }
 }
