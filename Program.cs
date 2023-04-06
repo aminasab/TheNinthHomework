@@ -27,12 +27,10 @@
             asyncImageDowloader.ImageCompleted += c_ImageCompleted;
             asyncImageDowloader.DownloaderAsync(token);
             Console.WriteLine("Нажмите клавишу A для выхода или любую другую клавишу для проверки статуса скачивания");
-            if (Console.ReadKey().Key == ConsoleKey.A)
-                source.Cancel();
-            else
+            while (Console.ReadKey().Key != ConsoleKey.A)
             {
-                Console.WriteLine(asyncImageDowloader.IsCompleted ? "\n Загружено" : "\n Не загружено");
                 Console.ReadKey();
+                Console.WriteLine(asyncImageDowloader.IsCompleted ? "\n Загружено" : "\n Не загружено");
             }
         }
     }
