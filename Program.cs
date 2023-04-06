@@ -29,7 +29,6 @@
             Console.WriteLine("Нажмите клавишу A для выхода или любую другую клавишу для проверки статуса скачивания");
             while (Console.ReadKey().Key != ConsoleKey.A)
             {
-                Console.ReadKey();
                 Console.WriteLine(asyncImageDowloader.IsCompleted ? "\n Загружено" : "\n Не загружено");
             }
         }
