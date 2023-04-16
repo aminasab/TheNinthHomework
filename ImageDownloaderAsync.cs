@@ -12,7 +12,6 @@ namespace TheNinthProgram
         int i = 1;
         List <Task> tasks = new List<Task>();
         List<string> _listOfUriOfImages;
-        public bool IsCompleted { get; private set; }
 
         public ImageDownloaderAsync(List<string> listOfUriOfImages)
         {
@@ -42,8 +41,10 @@ namespace TheNinthProgram
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                }
+                } 
             }
+            
+            
         }
         public bool IsCompletedAllTasks()
         {
