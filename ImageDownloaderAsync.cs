@@ -10,6 +10,7 @@ namespace TheNinthProgram
         // Как назовем файл на диске
         string _fileName;
         int i = 1;
+        List <Task> tasks = new List<Task>();
         List<string> _listOfUriOfImages;
         public bool IsCompleted { get; private set; }
 
@@ -23,7 +24,6 @@ namespace TheNinthProgram
         /// </summary>
         public async Task DownloaderAsync(CancellationToken cancellationToken)
         {
-            var tasks = new List<Task>();
             foreach (var url in _listOfUriOfImages)
             {
                 _fileName = $"image{i}.jpg";
@@ -44,17 +44,25 @@ namespace TheNinthProgram
                     Console.WriteLine(ex.Message);
                 }
             }
-            try
+        }
+        public bool IsCompletedAllTasks()
+        {
+            bool result = true;
+            for (int i = 0; i < 10; i++)
             {
-                await Task.WhenAll(tasks);
+                tasks.ForEach(task =>
+                {
+                    if (!task.IsCompleted)
+                    {
+                        result = false;
+                    }
+                });
+            }
+            if (result == true)
+            {
                 ImageCompleted?.Invoke(this, EventArgs.Empty);
-                IsCompleted = true;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Ошибка скачивания");
-                Console.WriteLine(ex.Message);
-            }
+            return result;
         }
     }
 }
